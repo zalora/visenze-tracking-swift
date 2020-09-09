@@ -19,7 +19,7 @@ public class ViSenzeTracker: NSObject {
     
     private static let userAgentHeader : String = "User-Agent"
     
-    public typealias FailureHandler = (Error) -> ()
+    public typealias VaFailureHandler = (Error) -> ()
     
     // MARK: properties
     
@@ -32,8 +32,7 @@ public class ViSenzeTracker: NSObject {
     public var timeoutInterval : TimeInterval = 10
     public var requestSerialization : VaRequestSerialization
     
-    public var userAgent : String = "tracker-ios/unknown"
-    public var sdkVersion: String = "Unknown"
+    public let userAgent : String
     
     public convenience init?(code: String, isCn: Bool){
         let baseUrl = isCn ? ViSenzeTracker.DEFAULT_CN_ENDPOINT : ViSenzeTracker.DEFAULT_ENDPOINT
@@ -69,13 +68,7 @@ public class ViSenzeTracker: NSObject {
         
         session = URLSession(configuration: sessionConfig)
         
-        // set default user agent
-        
-        if let sdkVersion = Bundle(for:ViSenzeTracker.self).infoDictionary?["CFBundleShortVersionString"] as? String {
-            self.sdkVersion = sdkVersion
-        }
-        
-        self.userAgent = "tracker-ios/\(self.sdkVersion)"
+        self.userAgent =  VaDeviceData.sharedInstance.userAgent
     }
     
     

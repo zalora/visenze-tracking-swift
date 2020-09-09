@@ -11,10 +11,31 @@ import UIKit
 public class VaRequestSerialization: NSObject {
     
     /// generate the url with query string and escape parameter properly
-    public func generateRequestUrl( baseUrl: String , apiMethod: VaApiMethod , params : VaParamsProtocol, code: String) -> String {
+    public func generateRequestUrl(
+                                    baseUrl: String ,
+                                    code: String,
+                                    apiMethod: VaApiMethod ,
+                                    params : VaParamsProtocol,
+                                    deviceData: VaDeviceData) -> String {
         
         var paramDict = params.toDict()
         paramDict["code"] = code
+        
+        // add in device data
+        paramDict["sdk"] = deviceData.sdk
+        paramDict["v"] = deviceData.sdkVersion
+        paramDict["p"] = deviceData.platform
+        paramDict["os"] = deviceData.os
+        paramDict["osv"] = deviceData.osv
+        paramDict["sr"] = deviceData.screenResolution
+        paramDict["ab"] = deviceData.appBundleId
+        paramDict["an"] = deviceData.appName
+        paramDict["av"] = deviceData.appVersion
+        paramDict["db"] = deviceData.deviceBrand
+        paramDict["dm"] = deviceData.deviceModel
+        paramDict["lang"] = deviceData.language
+        
+        
         
         let queryString = generateQueryString(paramDict)
         
