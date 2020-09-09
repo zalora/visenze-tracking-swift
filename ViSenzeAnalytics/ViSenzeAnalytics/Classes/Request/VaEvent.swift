@@ -18,6 +18,19 @@ public protocol VaParamsProtocol{
     func toDict() -> [String: String]
 }
 
+// predefine events
+public enum VaEventAction: String {
+    case PRODUCT_CLICK  = "product_click"
+    case PRODUCT_VIEW = "product_view"
+    case VIEW = "view"
+    case CLICK = "click"
+    case SEARCH = "search"
+    case APP_INSTALL = "app_install"
+    case APP_UNINSTALL = "app_uninstall"
+    case TRANSACTION = "transaction"
+    case ADD_TO_CART = "add_to_cart"
+}
+
 public class VaEvent: VaParamsProtocol {
 
     // MARK: common fields
@@ -34,8 +47,10 @@ public class VaEvent: VaParamsProtocol {
     // Linux timestamp
     public var ts: Int64
     
-    public var label: String? = nil
+    public var value: String? = nil
     
+    public var label: String? = nil
+        
     public var queryId: String? = nil
     
     public var fromReqId: String? = nil
@@ -106,6 +121,107 @@ public class VaEvent: VaParamsProtocol {
         self.ts = Int64(Date().timeIntervalSince1970 * 1000)
     }
     
+    // MARK: event constructor helpers
+    public static func newSearchEvent(queryId: String) -> VaEvent? {
+        if queryId.isEmpty {
+            print("ViSenze Analytics - missing queryId for search event")
+            return nil
+        }
+        
+        let searchEvent = VaEvent(action: VaEventAction.SEARCH.rawValue)
+        searchEvent?.queryId = queryId
+        return searchEvent
+    }
+    
+    public static func newProductClickEvent(queryId: String, pid: String, imgUrl: String, pos: Int) -> VaEvent? {
+        if queryId.isEmpty || pid.isEmpty || imgUrl.isEmpty{
+            print("ViSenze Analytics - missing queryId or pid or imgUrl for product click event")
+            return nil
+        }
+        
+        if pos < 1 {
+            print("ViSenze Analytics - pos (product position in search results) must be at least 1")
+            
+            return nil
+        }
+        
+        let productClick = VaEvent(action: VaEventAction.PRODUCT_CLICK.rawValue)
+        productClick?.queryId = queryId
+        productClick?.pid = pid
+        productClick?.imUrl = imgUrl
+        productClick?.pos = pos
+        return productClick
+    }
+    
+    public static func newProductImpressionEvent(queryId: String, pid: String, imgUrl: String, pos: Int) -> VaEvent? {
+        if queryId.isEmpty || pid.isEmpty || imgUrl.isEmpty{
+            print("ViSenze Analytics - missing queryId or pid or imgUrl for product impression event")
+            return nil
+        }
+        
+        if pos < 1 {
+            print("ViSenze Analytics - pos (product position in search results) must be at least 1")
+            
+            return nil
+        }
+        
+        let productView = VaEvent(action: VaEventAction.PRODUCT_VIEW.rawValue)
+        productView?.queryId = queryId
+        productView?.pid = pid
+        productView?.imUrl = imgUrl
+        productView?.pos = pos
+        return productView
+    }
+    
+    public static func newAdd2CartEvent(queryId: String, pid: String, imgUrl: String, pos: Int) -> VaEvent? {
+        if queryId.isEmpty || pid.isEmpty || imgUrl.isEmpty{
+            print("ViSenze Analytics - missing queryId or pid or imgUrl for add to cart event")
+            return nil
+        }
+        
+        if pos < 1 {
+            print("ViSenze Analytics - pos (product position in search results) must be at least 1")
+            
+            return nil
+        }
+        
+        let add2Cart = VaEvent(action: VaEventAction.ADD_TO_CART.rawValue)
+        add2Cart?.queryId = queryId
+        add2Cart?.pid = pid
+        add2Cart?.imUrl = imgUrl
+        add2Cart?.pos = pos
+        return add2Cart
+    }
+    
+    public static func newTransactionEvent(queryId: String, transactionId: String, value: Double) -> VaEvent? {
+        if queryId.isEmpty {
+            print("ViSenze Analytics - queryId is missing for transaction event")
+            return nil
+        }
+        
+        if transactionId.isEmpty {
+            print("ViSenze Analytics - transactionId is missing for transaction event")
+            return nil
+        }
+        
+        let transEvnt = VaEvent(action: VaEventAction.TRANSACTION.rawValue)
+        transEvnt?.queryId = queryId
+        transEvnt?.transId = transactionId
+        transEvnt?.value = String(value)
+        
+        return transEvnt
+    }
+    
+    
+    public static func newClickEvent() -> VaEvent? {
+        return VaEvent(action: VaEventAction.CLICK.rawValue)
+    }
+    
+    public static func newImpressionEvent() -> VaEvent? {
+        return VaEvent(action: VaEventAction.VIEW.rawValue)
+    }
+    
+    
     // MARK: param protocol
     
     public func toDict() -> [String: String] {
@@ -120,6 +236,10 @@ public class VaEvent: VaParamsProtocol {
         
         if let name = self.name {
             dict["name"] = name
+        }
+        
+        if let value = self.value {
+            dict["value"] = value
         }
         
         if let label = self.label {
