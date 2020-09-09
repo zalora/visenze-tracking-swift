@@ -72,5 +72,53 @@ public class ViSenzeTracker: NSObject {
     }
     
     
+    public func sendEvent(_ event: VaEvent,
+                      handler:  ( (_ data: VaEventResponse?, Error?) -> Void )?
+                      ) -> Void {
+        
+
+        if event.uid == nil || event.uid?.count == 0{
+            event.uid = VaUidHelper.uniqueDeviceUid()
+        }
+        
+        // TODO: add sid for event if missing
+        
+        
+        let url = requestSerialization.generateRequestUrl(baseUrl: self.baseUrl,
+                                                          code: self.code,
+                                                          apiMethod: .TRACKER,
+                                                          params: event,
+                                                          deviceData: VaDeviceData.sharedInstance)
+        
+    
+        let request = NSMutableURLRequest(url: URL(string: url)! , cachePolicy: .useProtocolCachePolicy , timeoutInterval: timeoutInterval)
+        
+        request.addValue(self.userAgent , forHTTPHeaderField: ViSenzeTracker.userAgentHeader)
+        
+        session.dataTask(with: request as URLRequest, completionHandler:{
+            (data, response, error) in
+            
+            // parse if there is no error
+            var vaResponse: VaEventResponse? = nil
+            if error == nil {
+                if let httpResponse = response as? HTTPURLResponse, let data = data {
+                    if httpResponse.statusCode > 399 {
+                        vaResponse = VaEventResponse(data: data)
+                    }
+                }
+            }
+            
+            if let vaResponse = vaResponse, let responseError = vaResponse.error {
+                // warn user if there is any error
+                print("ViSenze Analytics - send event error: \"\(responseError.message)\", code:\(responseError.code), reqid:\(vaResponse.reqid)" )
+            }
+            
+            if let handler = handler {
+                handler( vaResponse ,  error )
+            }
+            
+        }).resume()
+    }
+    
     
 }

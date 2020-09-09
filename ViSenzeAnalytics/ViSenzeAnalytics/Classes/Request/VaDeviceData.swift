@@ -181,8 +181,8 @@ public class VaDeviceData: NSObject {
         self.deviceBrand = "Apple"
         self.deviceModel = UIDevice.modelName
         
-        let nWidth = UIScreen.main.nativeBounds.width
-        let nHeight = UIScreen.main.nativeBounds.height
+        let nWidth = Int(UIScreen.main.nativeBounds.width)
+        let nHeight = Int(UIScreen.main.nativeBounds.height)
         self.screenResolution = "\(nWidth)x\(nHeight)"
         self.language = Locale.current.languageCode ?? VaDeviceData.UNKNOWN
         

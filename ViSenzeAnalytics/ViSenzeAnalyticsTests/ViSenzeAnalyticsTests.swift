@@ -19,9 +19,17 @@ class ViSenzeAnalyticsTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testInitTracker() {
+        let tracker = ViSenzeAnalytics.sharedInstance.newTracker(code: "test", forCn: false)
+        let expectation = self.expectation(description: "wait_for_response")
+        
+        var testEvent: VaEvent = VaEvent(action: "click")!
+        tracker.sendEvent(testEvent) { (eventResponse, networkError) in
+            print("done")
+             expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 30, handler: nil)
     }
 
     func testPerformanceExample() {
