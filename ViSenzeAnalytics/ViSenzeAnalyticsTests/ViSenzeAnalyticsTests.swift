@@ -29,6 +29,8 @@ class ViSenzeAnalyticsTests: XCTestCase {
              expectation.fulfill()
         }
         
+//        let productClickEvent =  VaEvent.newProductClickEvent(queryId: "ViSearch reqid in API response", pid: "product ID", imgUrl: "product image URL", pos: 3)
+        
         waitForExpectations(timeout: 30, handler: nil)
     }
 
