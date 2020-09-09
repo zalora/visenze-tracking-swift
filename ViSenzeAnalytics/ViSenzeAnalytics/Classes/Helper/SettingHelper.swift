@@ -20,6 +20,20 @@ open class SettingHelper: NSObject {
        return userDefault.bool(forKey: propName)
     }
     
+    public static func getInt64Prop(propName: String) -> Int64 {
+        if let storeString = getStringSettingProp(propName: propName) {
+            if let num = Int64(storeString) {
+                return num
+            }
+        }
+        
+        return 0;
+    }
+    
+    public static func setInt64Prop(propName: String, newValue: Int64) {
+        return setSettingProp(propName: propName, newValue: String(newValue))
+    }
+    
     /// Set a property , store in userDefault
     ///
     /// - parameter propName: property name

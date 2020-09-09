@@ -78,11 +78,12 @@ public class ViSenzeTracker: NSObject {
         
 
         if event.uid == nil || event.uid?.count == 0{
-            event.uid = VaUidHelper.uniqueDeviceUid()
+            event.uid = VaSessionManager.sharedInstance.getUid()
         }
         
-        // TODO: add sid for event if missing
-        
+        if event.sid == nil || event.sid?.count == 0 {
+            event.sid = VaSessionManager.sharedInstance.getSessionId()
+        }
         
         let url = requestSerialization.generateRequestUrl(baseUrl: self.baseUrl,
                                                           code: self.code,

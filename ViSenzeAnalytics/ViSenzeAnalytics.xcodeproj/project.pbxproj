@@ -19,6 +19,7 @@
 		BD9AD0E125088B840012918F /* VaDeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9AD0E025088B840012918F /* VaDeviceData.swift */; };
 		BD9AD0E42508B1C20012918F /* VaEventResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9AD0E32508B1C10012918F /* VaEventResponse.swift */; };
 		BD9AD0E62508B2010012918F /* VaError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9AD0E52508B2010012918F /* VaError.swift */; };
+		BD9AD0E82508BFC30012918F /* VaSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9AD0E72508BFC30012918F /* VaSessionManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		BD9AD0E025088B840012918F /* VaDeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaDeviceData.swift; sourceTree = "<group>"; };
 		BD9AD0E32508B1C10012918F /* VaEventResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaEventResponse.swift; sourceTree = "<group>"; };
 		BD9AD0E52508B2010012918F /* VaError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaError.swift; sourceTree = "<group>"; };
+		BD9AD0E72508BFC30012918F /* VaSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VaSessionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				BD9AD0D02507CE530012918F /* Helper */,
 				BD9AD0DA2507D2C40012918F /* ViSenzeAnalytics.swift */,
 				BD9AD0DC2507D2E70012918F /* ViSenzeTracker.swift */,
+				BD9AD0E72508BFC30012918F /* VaSessionManager.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD9AD0E42508B1C20012918F /* VaEventResponse.swift in Sources */,
+				BD9AD0E82508BFC30012918F /* VaSessionManager.swift in Sources */,
 				BD9AD0D22507CE660012918F /* SettingHelper.swift in Sources */,
 				BD9AD0DB2507D2C40012918F /* ViSenzeAnalytics.swift in Sources */,
 				BD9AD0D92507D2720012918F /* VaRequestSerialization.swift in Sources */,
