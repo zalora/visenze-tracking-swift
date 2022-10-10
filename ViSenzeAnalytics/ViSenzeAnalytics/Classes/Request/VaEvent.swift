@@ -123,6 +123,10 @@ public class VaEvent: VaParamsProtocol {
         self.ts = Int64(Date().timeIntervalSince1970 * 1000)
     }
     
+    public func isTransactionEvent() -> Bool {
+        return action == VaEventAction.TRANSACTION.rawValue
+    }
+    
     // MARK: event constructor helpers
     public static func newSearchEvent(queryId: String) -> VaEvent? {
         if queryId.isEmpty {
@@ -262,20 +266,13 @@ public class VaEvent: VaParamsProtocol {
         return add2Wishlist
     }
     
-    // generate random transaction ID if missing
     public static func newTransactionEvent(queryId: String, value: Double) -> VaEvent? {
-        let transId = generateRandomTransId()
-        return newTransactionEvent(queryId: queryId, transactionId: transId, value: value)
+        return newTransactionEvent(queryId: queryId, transactionId: "", value: value)
     }
     
     public static func newTransactionEvent(queryId: String, transactionId: String, value: Double) -> VaEvent? {
         if queryId.isEmpty {
             print("ViSenze Analytics - queryId is missing for transaction event")
-            return nil
-        }
-        
-        if transactionId.isEmpty {
-            print("ViSenze Analytics - transactionId is missing for transaction event")
             return nil
         }
         
@@ -297,14 +294,12 @@ public class VaEvent: VaParamsProtocol {
             return nil
         }
         
-    
         let resultLoadEvt = VaEvent(action: VaEventAction.RESULT_LOAD.rawValue)
         resultLoadEvt?.queryId = queryId
         resultLoadEvt?.pid = pid
         
         return resultLoadEvt
     }
-    
     
     public static func newClickEvent() -> VaEvent? {
         return VaEvent(action: VaEventAction.CLICK.rawValue)
