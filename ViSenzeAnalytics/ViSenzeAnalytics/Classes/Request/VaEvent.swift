@@ -29,6 +29,7 @@ public enum VaEventAction: String {
     case APP_UNINSTALL = "app_uninstall"
     case TRANSACTION = "transaction"
     case ADD_TO_CART = "add_to_cart"
+    case ADD_TO_WISHLIST = "add_to_wishlist"
     case RESULT_LOAD = "result_load"
 }
 
@@ -134,6 +135,18 @@ public class VaEvent: VaParamsProtocol {
         return searchEvent
     }
     
+    public static func newProductClickEvent(queryId: String, pid: String) -> VaEvent? {
+        if queryId.isEmpty || pid.isEmpty {
+            print("ViSenze Analytics - missing queryId or pid for product click event")
+            return nil
+        }
+        
+        let productClick = VaEvent(action: VaEventAction.PRODUCT_CLICK.rawValue)
+        productClick?.queryId = queryId
+        productClick?.pid = pid
+        return productClick
+    }
+    
     public static func newProductClickEvent(queryId: String, pid: String, imgUrl: String, pos: Int) -> VaEvent? {
         if queryId.isEmpty || pid.isEmpty || imgUrl.isEmpty{
             print("ViSenze Analytics - missing queryId or pid or imgUrl for product click event")
@@ -142,7 +155,6 @@ public class VaEvent: VaParamsProtocol {
         
         if pos < 1 {
             print("ViSenze Analytics - pos (product position in search results) must be at least 1")
-            
             return nil
         }
         
@@ -152,6 +164,18 @@ public class VaEvent: VaParamsProtocol {
         productClick?.imUrl = imgUrl
         productClick?.pos = pos
         return productClick
+    }
+    
+    public static func newProductImpressionEvent(queryId: String, pid: String) -> VaEvent? {
+        if queryId.isEmpty || pid.isEmpty {
+            print("ViSenze Analytics - missing queryId or pid for product impression event")
+            return nil
+        }
+        
+        let productView = VaEvent(action: VaEventAction.PRODUCT_VIEW.rawValue)
+        productView?.queryId = queryId
+        productView?.pid = pid
+        return productView
     }
     
     public static func newProductImpressionEvent(queryId: String, pid: String, imgUrl: String, pos: Int) -> VaEvent? {
@@ -174,6 +198,18 @@ public class VaEvent: VaParamsProtocol {
         return productView
     }
     
+    public static func newAdd2CartEvent(queryId: String, pid: String) -> VaEvent? {
+        if queryId.isEmpty || pid.isEmpty {
+            print("ViSenze Analytics - missing queryId or pid for add to cart event")
+            return nil
+        }
+        
+        let add2Cart = VaEvent(action: VaEventAction.ADD_TO_CART.rawValue)
+        add2Cart?.queryId = queryId
+        add2Cart?.pid = pid
+        return add2Cart
+    }
+    
     public static func newAdd2CartEvent(queryId: String, pid: String, imgUrl: String, pos: Int) -> VaEvent? {
         if queryId.isEmpty || pid.isEmpty || imgUrl.isEmpty{
             print("ViSenze Analytics - missing queryId or pid or imgUrl for add to cart event")
@@ -194,6 +230,44 @@ public class VaEvent: VaParamsProtocol {
         return add2Cart
     }
     
+    public static func newAdd2WishListEvent(queryId: String, pid: String) -> VaEvent? {
+        if queryId.isEmpty || pid.isEmpty {
+            print("ViSenze Analytics - missing queryId or pid for add to wishlist event")
+            return nil
+        }
+        
+        let add2Wishlist = VaEvent(action: VaEventAction.ADD_TO_WISHLIST.rawValue)
+        add2Wishlist?.queryId = queryId
+        add2Wishlist?.pid = pid
+        return add2Wishlist
+    }
+    
+    public static func newAdd2WishListEvent(queryId: String, pid: String, imgUrl: String, pos: Int) -> VaEvent? {
+        if queryId.isEmpty || pid.isEmpty || imgUrl.isEmpty{
+            print("ViSenze Analytics - missing queryId or pid or imgUrl for add to wishlist event")
+            return nil
+        }
+        
+        if pos < 1 {
+            print("ViSenze Analytics - pos (product position in search results) must be at least 1")
+            
+            return nil
+        }
+        
+        let add2Wishlist = VaEvent(action: VaEventAction.ADD_TO_WISHLIST.rawValue)
+        add2Wishlist?.queryId = queryId
+        add2Wishlist?.pid = pid
+        add2Wishlist?.imUrl = imgUrl
+        add2Wishlist?.pos = pos
+        return add2Wishlist
+    }
+    
+    // generate random transaction ID if missing
+    public static func newTransactionEvent(queryId: String, value: Double) -> VaEvent? {
+        let transId = generateRandomTransId()
+        return newTransactionEvent(queryId: queryId, transactionId: transId, value: value)
+    }
+    
     public static func newTransactionEvent(queryId: String, transactionId: String, value: Double) -> VaEvent? {
         if queryId.isEmpty {
             print("ViSenze Analytics - queryId is missing for transaction event")
@@ -211,6 +285,10 @@ public class VaEvent: VaParamsProtocol {
         transEvnt?.value = String(value)
         
         return transEvnt
+    }
+    
+    public static func generateRandomTransId() -> String {
+        return UUID().uuidString
     }
     
     public static func newResultLoadEvent(queryId: String, pid: String?) -> VaEvent? {
